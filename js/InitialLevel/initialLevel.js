@@ -9,7 +9,19 @@ class SimpleLevel extends Phaser.State {
         this.game.canvas.oncontextmenu = function (e) {
             e.preventDefault();
         }
-        this.game.stage.backgroundColor = "#496a5b";
+        var spriteWidth = this.game.world.width/64;
+        console.log(spriteWidth);
+        var spriteHeight = this.game.world.height/64;
+        console.log(spriteHeight);
+        for(var y = 0; y < spriteHeight; y++){
+            var ySpawn = y*64;
+            for(var x = 0; x < spriteWidth; x++){
+                var xSpawn = x*64;
+                this.testSprite = this.game.add.sprite(xSpawn, ySpawn, 'groundTiles');
+                 var randN = Math.floor(Math.random() * 12) + 1;
+                this.testSprite.frame = randN;
+            }
+        }
     }
 
     _spawnObject() {

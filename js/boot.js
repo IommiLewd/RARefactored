@@ -1,4 +1,4 @@
-var game = new Phaser.Game(1080, 640, Phaser.AUTO, 'phaser-example', null, false, false);
+var game = new Phaser.Game(960, 640, Phaser.AUTO, 'phaser-example', null, false, false);
 class Boot extends Phaser.State {
 
     preload() {
