@@ -34,6 +34,7 @@ class SimpleLevel extends Phaser.State {
     _spawnTitan(type) {
         this.titan = new titan(this.game, 300, 300, undefined, type);
         //    this.titans.add(this.titan);
+        this.titan._movementHandler();
         this.titanArray.push(this.titan);
         this.depthSorter.add(this.titan);
     }
@@ -71,17 +72,10 @@ class SimpleLevel extends Phaser.State {
         this.enemyArray = [];
         this.depthSorter = this.game.add.group();
         this._spawnMarker();
+        this._spawnTitan(1);
         this._spawnTitan();
         this._spawnTitan();
         this._spawnTitan();
-        this._spawnTitan();
-        this._spawnTitan();
-        this._spawnTitan();
-        this._spawnTitan();
-        this._spawnTitan();
-        this._spawnTitan();
-        this._spawnTitan();
-        //this._spawnTitanLord();
         this._spawnObject();
 
 

@@ -5,21 +5,46 @@ class titan extends Phaser.Sprite {
         this.game.physics.arcade.enable(this);
         this.anchor.setTo(0.5, 0.5);
         this.game.physics.arcade.enableBody(this);
+
         this.body.collideWorldBounds = true;
-        this.titanAnim = this.game.add.sprite(0, 0, 'titan');
+        if (type === 1) {
+            this.titanAnim = this.game.add.sprite(0, 0, 'titanLord');
+            console.log('TitanLord Spawned!');
+            this.health = 240;
+        } else {
+            this.titanAnim = this.game.add.sprite(0, 0, 'titan');
+            console.log('Titan Spawned!');
+            this.health = 120;
+        }
+
         this.titanAnim.anchor.setTo(0.5, 1.0);
         this.addChild(this.titanAnim);
         this.idle = true;
         this.attacking = false;
+        this.takingDamage = false;
         this.positionX = this.x;
         this.positionY = this.x;
         this.targetDistance = 0;
         this.targetX = 0;
         this.targetY = 0;
         this._addAnimations();
-        console.log('Titan Spawned!');
     }
 
+    _damageTaken(damage) {
+        if (this.takingDamage === false) {
+            this.takingDamage = true;
+            this.health -= damage;
+            if (this.health < 0) {
+                this.kill();
+            }
+            console.log('damageTaken!');
+            this.titanAnim.tint = 0xff3b3c;
+            this.game.time.events.add(Phaser.Timer.SECOND * 2, function(){
+                this.takingDamage = false;
+                this.titanAnim.tint = 0xffffff;
+            }, this);
+        }
+    }
     _addAnimations() {
         this.titanAnim.animations.add('toward', [0, 1, 2, 3], 7, true);
         this.titanAnim.animations.add('away', [4, 5, 6, 7], 7, true);
@@ -50,17 +75,15 @@ class titan extends Phaser.Sprite {
     _arrival() {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
-        
-//           this._movementHandler();
     }
-    
+
     _rangeSolver() {
         this.positionDistance = this.game.math.distance(this.x, this.y, this.positionX, this.positionY);
         if (this.positionDistance < 10) {
             this._arrival();
         }
         this.targetDistance = this.game.math.distance(this.x, this.y, this.targetX, this.targetY);
-        if (this.targetDistance < 90) {
+        if (this.targetDistance < 120) {
             this.attacking = true;
         } else {
             this.attacking = false;
@@ -69,8 +92,8 @@ class titan extends Phaser.Sprite {
     }
 
     _movementHandler() {
-        var randomX = (Math.random() * 50) - 25;
-        var randomY = (Math.random() * 50) - 25;
+        var randomX = (Math.random() * 60) - 30;
+        var randomY = (Math.random() * 60) - 30;
         this.positionX += randomX;
         this.positionY += randomY;
         this.game.physics.arcade.moveToXY(this, this.positionX, this.positionY, 60);
@@ -79,9 +102,10 @@ class titan extends Phaser.Sprite {
     update() {
         this._animationsHandler();
         this._rangeSolver();
-        if(this.attacking === true && this.targetDistance > 10){
-              this.game.physics.arcade.moveToXY(this, this.targetX, this.targetY, 60);
+        if (this.attacking === true && this.targetDistance > 10) {
+            this.game.physics.arcade.moveToXY(this, this.targetX, this.targetY, 50);
         }
+
     }
 }
 
