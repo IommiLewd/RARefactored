@@ -5,11 +5,12 @@ class Preload extends Phaser.State {
        this.load.image('flag', 'img/flag.png');
        this.load.image('testObject', 'img/testObject.png');
        this.load.image('flagShade', 'img/flagShade.png');
-       this.load.image('background', 'img/background.png');
+       
         this.load.spritesheet('titan', 'img/titanSheet.png', 30, 44, 16);
         this.load.spritesheet('titanLord', 'img/titanLordSheet.png', 36, 52, 16);
         
     
+        this.load.spritesheet('foliage', 'img/foliage.png', 32,64,4);
         this.load.spritesheet('groundTiles', 'img/groundTiles.png', 64,64,12);
         this.load.image('shade', 'img/shade.png');
         this.load.script('titan', 'js/entities/titan.js');

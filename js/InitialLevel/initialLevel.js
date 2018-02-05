@@ -4,25 +4,45 @@ class SimpleLevel extends Phaser.State {
     }
 
     _loadLevel() {
-        this.background = this.game.add.sprite(0, 0, 'background');
+        //this.background = this.game.add.sprite(0, 0, 'background');
         this.game.stage.disableVisibilityChange = true;
         this.game.canvas.oncontextmenu = function (e) {
             e.preventDefault();
         }
-        var spriteWidth = this.game.world.width/64;
+        var spriteWidth = this.game.world.width / 64;
         console.log(spriteWidth);
-        var spriteHeight = this.game.world.height/64;
+        var spriteHeight = this.game.world.height / 64;
         console.log(spriteHeight);
-        for(var y = 0; y < spriteHeight; y++){
-            var ySpawn = y*64;
-            for(var x = 0; x < spriteWidth; x++){
-                var xSpawn = x*64;
+        for (var y = 0; y < spriteHeight; y++) {
+            var ySpawn = y * 64;
+            for (var x = 0; x < spriteWidth; x++) {
+                var xSpawn = x * 64;
                 this.testSprite = this.game.add.sprite(xSpawn, ySpawn, 'groundTiles');
-                 var randN = Math.floor(Math.random() * 12) + 1;
+                var randN = Math.floor(Math.random() * 12) + 1;
                 this.testSprite.frame = randN;
             }
         }
     }
+    
+    _spawnFoliage(amount){
+        if(amount === undefined){
+            amount = 20;
+        }
+        for(var i = 0; i < amount; i++){
+        
+            var randX = Math.floor(Math.random() * this.game.world.width - 200) + 200;
+            
+            var randY = Math.floor(Math.random() * this.game.world.height - 200) + 200;
+            console.log(this.game.world.width);
+        this.treeShade = this.game.add.sprite(randX, randY, 'flagShade');
+        this.treeShade.anchor.setTo(0.5);
+        this.testTree = this.game.add.sprite(0,0 , 'foliage');
+        this.testTree.anchor.setTo(0.5, 1.0); 
+        this.treeShade.addChild(this.testTree);
+        var randN = Math.floor(Math.random() * 4) + 1;
+        this.testTree.frame = randN;
+        this.depthSorter.add(this.treeShade);
+    }}
 
     _spawnObject() {
         this.testSprite = this.game.add.sprite(100, 300, 'testObject');
@@ -45,7 +65,6 @@ class SimpleLevel extends Phaser.State {
 
     _spawnTitan(type) {
         this.titan = new titan(this.game, 300, 300, undefined, type);
-        //    this.titans.add(this.titan);
         this.titan._movementHandler();
         this.titanArray.push(this.titan);
         this.depthSorter.add(this.titan);
@@ -83,6 +102,8 @@ class SimpleLevel extends Phaser.State {
         this.objectArray = [];
         this.enemyArray = [];
         this.depthSorter = this.game.add.group();
+        
+        this._spawnFoliage();
         this._spawnMarker();
         this._spawnTitan(1);
         this._spawnTitan();
